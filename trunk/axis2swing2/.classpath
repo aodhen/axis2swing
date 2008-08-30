@@ -21,7 +21,7 @@
 	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-jibx-1.4.jar"/>
 	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-json-1.4.jar"/>
 	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-jws-api-1.4.jar"/>
-	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-kernel-1.4.jar"/>
+	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-kernel-1.4.jar" sourcepath="/Users/alan/Desktop/axis2-1.4.src/modules"/>
 	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-metadata-1.4.jar"/>
 	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-mtompolicy-1.4.jar"/>
 	<classpathentry kind="lib" path="axis2-1.4/lib/axis2-saaj-1.4.jar"/>

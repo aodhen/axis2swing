@@ -29,7 +29,7 @@ public class Axis2AdminManagerTester extends TestCase {
 		}
 	}
 
-	public void test_loading_with_aixs2Config_and_repos_fields () {
+	public void test_manager_loaded () {
 
 			assertNotNull(manager);
 		
@@ -42,7 +42,7 @@ public class Axis2AdminManagerTester extends TestCase {
 	
 	
 	public void test_file_upload() {
-		manager.processUploadFile("/usr/local/apache-tomcat-6.0.16/webapps/axis2/WEB-INF/services/TemperatureConverter.aar");
+		manager.processUploadFile("testFiles/TemperatureConverter.aar");
 		File uploadedFile = new File(manager.getAxisConfiguration().getRepository().getFile() + "services/" + "TemperatureConverter.aar");
 		assertTrue(uploadedFile.exists());
 		
