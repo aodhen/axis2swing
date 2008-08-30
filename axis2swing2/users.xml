@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<users>
+    <role name="administrator">
+        <user>
+            <username>admin</username>
+            <password>adminpass</password>
+        </user>
+        <user>
+            <username>admin2</username>
+            <password>adminpass2</password>
+        </user>
+
+    </role>
+    <role name="manager">
+        <user>
+            <username>manager</username>
+            <password>mgrpass</password>
+        </user>
+    </role>
+    <role name="user">
+        <user>
+	    <username>user</username>
+	    <password>userpass</password>
+        </user>
+    </role>
+</users>
+
