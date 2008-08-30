@@ -13,6 +13,8 @@ import org.apache.axis2.util.OptionsValidator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import axis2swing.middleware.Axis2AdminManager;
+
 public class MainApp extends AxisServer {
 	
 	private static final Log log = LogFactory.getLog(SimpleHTTPServer.class);
@@ -75,6 +77,11 @@ public class MainApp extends AxisServer {
             server.start();
             log.info("[MainApp] Started");
             System.out.println("[MainApp] Started");
+            
+            Axis2AdminManager manager = new Axis2AdminManager(server.getConfigurationContext());
+            
+            
+            
         } catch (Throwable t) {
             log.fatal("[MainApp] Shutting down. Error starting MainApp", t);
             System.err.println("[MainApp] Shutting down. Error starting MainApp");
