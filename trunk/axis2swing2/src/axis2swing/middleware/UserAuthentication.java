@@ -29,12 +29,12 @@ public class UserAuthentication{
 	
 	            // normalize text representation
 	            doc.getDocumentElement ().normalize ();
-	            System.out.println ("Root element of the doc is " + doc.getDocumentElement().getNodeName());
+	            //System.out.println ("Root element of the doc is " + doc.getDocumentElement().getNodeName());
 	            // ROOT ELEMENT is of course "users"
 	            
 	            NodeList listOfRoles = doc.getElementsByTagName("role");
 	            int totalRoles = listOfRoles.getLength();
-	            System.out.println("Total no of roles : " + totalRoles);
+	            //System.out.println("Total no of roles : " + totalRoles);
 	            
 	            Element roleElement;
 	            
@@ -50,8 +50,8 @@ public class UserAuthentication{
 	            }//end of for 1st for loop 
 	            
 	            if (roleIndex == -1) {
-	            	System.err.println("No such role: " + role);
-	            	System.exit(1);
+	            	return -1;
+	            	//System.exit(1);
 	            }
 	            
 	            Node firstRoleNode = listOfRoles.item(roleIndex);
@@ -75,7 +75,7 @@ public class UserAuthentication{
 	                    	String passVal = ((Node)textPassList.item(0)).getNodeValue().trim();
 	                    	
 	                    	if (passVal.equals(password)) {
-	                    		System.out.println("Authentication successful");
+	                    		//System.out.println("Authentication successful");
 	                    		isAuthenticated = true;
 	                    	}
 	                    }
@@ -84,8 +84,7 @@ public class UserAuthentication{
 	            } // end of 2nd for loop
 	            
 	            if (!isAuthenticated) {
-	            	System.err.println("Authentication failed!");
-	            	System.exit(1);
+	            	return -1;
 	            }
 	
 	        }catch (SAXParseException err) {
