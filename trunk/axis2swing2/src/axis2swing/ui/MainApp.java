@@ -86,12 +86,7 @@ public class MainApp extends AxisServer {
             
             Axis2AdminManager manager = new Axis2AdminManager(server.getConfigurationContext());
             
-            Collection modules = manager.getModules();
             
-            for(Iterator iterator = modules.iterator(); iterator.hasNext();) {
-            	AxisModule module = (AxisModule) iterator.next();
-            	System.out.println(module.getName());
-            }
              
             
                         		
