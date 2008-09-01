@@ -75,16 +75,6 @@ public class Axis2AdminManager {
 		return null;
 	}
 	
-	public Iterator getOperations (String serviceName) {
-		try {
-			return getAxisConfiguration().getService(serviceName).getOperations();
-		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
 	public Collection getAxisServices() {
 		return getAxisConfiguration().getServices().values();
 	}
@@ -199,10 +189,7 @@ public class Axis2AdminManager {
 				String paraValue = (String)parameters.get(paraName);
 				
 				operation.addParameter(new Parameter(paraName, paraValue));
-			}
-
-				
-			
+			}	
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -226,6 +213,7 @@ public class Axis2AdminManager {
 			e.printStackTrace();
 		}
 	}
+	
 	public void processEngageModuleService(String serviceName, String moduleName) {
 		try {
 			getAxisConfiguration().getService(serviceName).engageModule(getAxisConfiguration().getModule(moduleName));
@@ -239,16 +227,51 @@ public class Axis2AdminManager {
 	public void processEngageModuleOperation(String serviceName, String operationName, String moduleName) {
 		 
 		try {
-			AxisService service = getAxisConfiguration().getService(serviceName);
-			AxisOperation operation = service.getOperation(new QName(operationName));
-			
-			operation.engageModule(getAxisConfiguration().getModule(moduleName));
-			
+			getAxisConfiguration().getService(serviceName).getOperation(new QName(operationName)).engageModule(getAxisConfiguration().getModule(moduleName));
+				
+						
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+	
+	public void processDisengageModuleGlobal(String moduleName) {
+		try {
+			getAxisConfiguration().disengageModule(getAxisConfiguration().getModule(moduleName));
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
 	}
+	
+	public void processDisengageModuleServiceGroup(String serviceGroupName, String moduleName) {
+		try {
+			getAxisConfiguration().getServiceGroup(serviceGroupName).disengageModule(getAxisConfiguration().getModule(moduleName));
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void processDisengageModuleService(String serviceName, String moduleName) {
+		try {
+			getAxisConfiguration().getService(serviceName).disengageModule(getAxisConfiguration().getModule(moduleName));
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void processDisengageModuleOperation(String serviceName, String operationName, String moduleName) {
+		try {
+			getAxisConfiguration().getService(serviceName).getOperation(new QName(operationName)).disengageModule(getAxisConfiguration().getModule(moduleName));
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

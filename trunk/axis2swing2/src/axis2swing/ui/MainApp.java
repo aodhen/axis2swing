@@ -1,10 +1,14 @@
 package axis2swing.ui;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.axis2.context.ConfigurationContextFactory;
+import org.apache.axis2.description.AxisModule;
 import org.apache.axis2.engine.AxisServer;
 import org.apache.axis2.transport.http.SimpleHTTPServer;
 import org.apache.axis2.util.CommandLineOption;
@@ -12,6 +16,8 @@ import org.apache.axis2.util.CommandLineOptionParser;
 import org.apache.axis2.util.OptionsValidator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.Iterator;
 
 import axis2swing.middleware.Axis2AdminManager;
 
@@ -80,8 +86,15 @@ public class MainApp extends AxisServer {
             
             Axis2AdminManager manager = new Axis2AdminManager(server.getConfigurationContext());
             
+            Collection modules = manager.getModules();
             
+            for(Iterator iterator = modules.iterator(); iterator.hasNext();) {
+            	AxisModule module = (AxisModule) iterator.next();
+            	System.out.println(module.getName());
+            }
+             
             
+                        		
         } catch (Throwable t) {
             log.fatal("[MainApp] Shutting down. Error starting MainApp", t);
             System.err.println("[MainApp] Shutting down. Error starting MainApp");
