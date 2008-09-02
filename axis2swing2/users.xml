@@ -16,6 +16,10 @@
             <username>manager</username>
             <password>mgrpass</password>
         </user>
+        <user>
+        	<username>yanto</username>
+        	<password>password</password>
+        </user>
     </role>
     <role name="user">
         <user>
