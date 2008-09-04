@@ -234,5 +234,12 @@ public class Axis2SwingController
 
 		return true;
 	}
+	
+	public boolean engageModuleGlobally(String moduleName)
+	{
+		// TODO engage module globally
+
+		return true;
+	}
 
 }
