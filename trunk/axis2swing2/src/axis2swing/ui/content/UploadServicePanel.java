@@ -1,108 +1,133 @@
 package axis2swing.ui.content;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileFilter;
 
-import axis2swing.ui.Axis2SwingUIController;
+import axis2swing.ui.Axis2SwingController;
 
-public class UploadServicePanel extends PanelContent implements MouseListener{
+public class UploadServicePanel extends PanelContent
+{
+	private static final long serialVersionUID = 1L;
 
-	private JButton btnBrowse;
-	private JButton btnUpload;
-	private JTextField txtFilePath;
-	
-	public UploadServicePanel(Axis2SwingUIController controller) {
+	public UploadServicePanel(Axis2SwingController controller)
+	{
 		super(controller);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected void loadComponent() {		
-		JLabel lblWelcome = new JLabel();
-		this.add(lblWelcome);
-		lblWelcome.setText("Upload an Axis Service Archive File");
-		lblWelcome.setBounds(12, 12, 688, 25);
-		lblWelcome.setFont(new java.awt.Font("Dialog",1,20));
-		lblWelcome.setVerticalAlignment(SwingConstants.TOP);
-		lblWelcome.setVerticalTextPosition(SwingConstants.TOP);
-	
-		JTextPane txtMessage = new JTextPane();
-		this.add(txtMessage);
-		txtMessage.setText("You can upload a packaged Axis2 service from this page in two small steps." +
-				"\n\n# Browse to the location and select the axis service archive file you wish to upload" +
-				"\n# Click \"Upload\" button" +
-				"\n\nSimple as that!");
-		txtMessage.setBounds(12, 49, 611, 94);
-	
-		JLabel lblUpload = new JLabel();
-		this.add(lblUpload);
-		lblUpload.setText("Service Archieve");
-		lblUpload.setBounds(12, 155, 150, 15);
-	
-		txtFilePath = new JTextField();
-		this.add(txtFilePath);
-		txtFilePath.setBounds(122, 151, 395, 22);
-	
-		btnBrowse = new JButton("Browse...");
-		this.add(btnBrowse);
-		btnBrowse.addMouseListener(this);
-		btnBrowse.setBounds(529, 151, 100, 22);
-	
-		btnUpload = new JButton();
-		this.add(btnUpload);
-		btnUpload.addMouseListener(this);
-		btnUpload.setText("Upload");
-		btnUpload.setBounds(122, 185, 100, 22);
+	protected void initGUI()
+	{
+		setHeader("Upload an Axis Service Archive File");
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-	}
+		String message = "<html><p>You can upload a packaged Axis2 service from this page in two small steps.</p>"
+				+ "<ul>"
+				+ "<li>Browse to the location and select the axis service archive file you wish to upload</li>"
+				+ "<li>Click \"Upload\" button</li>"
+				+ "</ul>"
+				+ "<p>Simple as that!</p></html>";
 
-	public void mouseClicked(MouseEvent me) {
-		if(me.getSource() instanceof JButton) {
-			JButton theButton = (JButton)me.getSource();
-			
-			if(theButton.equals(btnBrowse)) {
-				//TODO browse for service
+		JLabel newLabel = new JLabel();
+		newLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		newLabel.setText(message);
+		add(newLabel);
+
+		add(Box.createRigidArea(new Dimension(0, 10)));
+
+		JPanel panUpload = new JPanel();
+		panUpload.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panUpload.setBackground(Color.white);
+		panUpload.setLayout(new FlowLayout(FlowLayout.LEADING));
+		panUpload.setMaximumSize(new Dimension(1000, 50));
+		add(panUpload);
+
+		newLabel = new JLabel();
+		newLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		newLabel.setText("Service Archieve");
+		panUpload.add(newLabel);
+
+		final JTextField txtFilePath = new JTextField();
+		txtFilePath.setPreferredSize(new Dimension(350, 22));
+		panUpload.add(txtFilePath);
+
+		final JButton btnBrowse = new JButton("Browse");
+		btnBrowse.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent ae)
+			{
+				FileFilter filter = new ServiceFileExtensionFilter();
+
 				JFileChooser fileChooser = new JFileChooser();
-				
-				int result = fileChooser.showOpenDialog(this);
-				txtFilePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
-			}
-			else if(theButton.equals(btnUpload)) {
-				
-				if(!controller.uploadService(txtFilePath.getText()))						
+				fileChooser.setFileFilter(filter);
+				int returnValue = fileChooser.showOpenDialog(btnBrowse);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION)
 				{
-					//TODO error uploading service
+					txtFilePath.setText(fileChooser.getSelectedFile()
+							.getAbsolutePath());
 				}
-			}		
-		}
-		
+			}
+
+		});
+		panUpload.add(btnBrowse);
+
+		JButton btnUpload = new JButton("Upload");
+		btnUpload.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent ae)
+			{
+				if (controller.uploadService(txtFilePath.getText()))
+				{
+					JOptionPane.showMessageDialog(null,
+							"File successfully uploaded", "Upload Service",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtFilePath.setText("");
+				}
+			}
+
+		});
+		add(btnUpload);
+
+		message = "<html><blockquote>"
+				+ "<p>Hot deployment of new service archives is enabled</p>"
+				+ "<p>Hot update of existing service archives is disabled</p>"
+				+ "</blockquote></html>";
+		newLabel = new JLabel(message);
+		add(newLabel);
+	}
+}
+
+class ServiceFileExtensionFilter extends FileFilter
+{
+
+	@Override
+	public boolean accept(File f)
+	{
+		if (f.getName().endsWith(".aar"))
+			return true;
+
+		return false;
 	}
 
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	@Override
+	public String getDescription()
+	{
+		return "Axis2 Service File (.aar)";
 	}
 
 }
