@@ -1,119 +1,99 @@
 package axis2swing.ui.content;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JTextPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import axis2swing.data.Module;
-import axis2swing.ui.Axis2SwingUIController;
+import axis2swing.ui.Axis2SwingController;
 
-public class EngageModuleGloballyPanel extends PanelContent implements MouseListener{
+public class EngageModuleGloballyPanel extends PanelContent
+{
+	private static final long serialVersionUID = 1L;
 
-	private JComboBox cmbModule;
-	
-	private JButton btnEngage;
-	
-	private JLabel lblResult;
-	
-	public EngageModuleGloballyPanel(Axis2SwingUIController controller) {
+	public EngageModuleGloballyPanel(Axis2SwingController controller)
+	{
 		super(controller);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected void loadComponent() {
-		
-		setLayout(null);
-	
-		JLabel lblHeader = new JLabel();
-		this.add(lblHeader);
-		lblHeader.setText("Engage Module Globally");
-		lblHeader.setBounds(12, 12, 350, 15);
-		lblHeader.setFont(new java.awt.Font("Dialog",1,20));
+	protected void initGUI()
+	{
+		setHeader("Engage Module Globally");
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-		JTextPane txtInstruction = new JTextPane();
-		this.add(txtInstruction);
-		txtInstruction.setText("To engage a module on all services across the system, select a module from the combo box below and click on the \"Engage\" button. Any module that needs to place handlers into the pre-dispatch phase needs to be engaged globally.");
-		txtInstruction.setBounds(12, 39, 800, 38);
+		String message = "<html><p>To engage a module on all services across the system,"
+				+ "select a module from the combo box below and click on the \"Engage\" button."
+				+ "Any module that needs to place handlers into the pre-dispatch phase needs to be engaged"
+				+ "globally.</p></html>";
 
-		JLabel lblSelect = new JLabel();
-		this.add(lblSelect);
-		lblSelect.setText("Select a Module");
-		lblSelect.setBounds(12, 89, 124, 15);
-	
+		JLabel newLabel = new JLabel(message);
+		add(newLabel);
+
 		List<Module> lstModule = controller.getAvailableModules();
-		if(lstModule != null && !lstModule.isEmpty()) {
-		
+		if (lstModule != null && !lstModule.isEmpty())
+		{
+			JPanel newPanel = new JPanel();
+			newPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+			newPanel.setBackground(Color.white);
+			newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.PAGE_AXIS));
+			add(newPanel);
+
+			newLabel = new JLabel("Select Module");
+
 			String[] moduleNames = new String[lstModule.size()];
-			for(int i = 0;i < lstModule.size();i++) {
+
+			for (int i = 0; i < lstModule.size(); i++)
 				moduleNames[i] = lstModule.get(i).getName();
-			}
-			
-			ComboBoxModel cmbModuleModel = 
-				new DefaultComboBoxModel(moduleNames);
-			cmbModule = new JComboBox();
-			this.add(cmbModule);
+
+			ComboBoxModel cmbModuleModel = new DefaultComboBoxModel(moduleNames);
+
+			final JComboBox cmbModule = new JComboBox();
+			cmbModule.setAlignmentX(Component.LEFT_ALIGNMENT);
+			cmbModule.setMaximumSize(new Dimension(300, 40));
 			cmbModule.setModel(cmbModuleModel);
-			cmbModule.setBounds(148, 85, 274, 22);
-	
-			btnEngage = new JButton();
-			this.add(btnEngage);
-			btnEngage.addMouseListener(this);
-			btnEngage.setText("Engage");
-			btnEngage.setBounds(148, 119, 100, 22);
-			
-			lblResult = new JLabel();
-			lblResult.setBounds(148, 155, 800, 22);
-			lblResult.setVisible(false);
-			this.add(lblResult);
-			}
-		else {
-			JLabel lblNoModule = new JLabel("No available modules");
-			lblNoModule.setBounds(148, 85, 800, 22);
-			this.add(lblNoModule);
-		}
-	}
+			newPanel.add(cmbModule);
 
-	public void mouseClicked(MouseEvent me) {
-		if(me.getSource() instanceof JButton) {
-			JButton theButton = (JButton)me.getSource();
-			
-			if(theButton.equals(btnEngage)) {
-				if(controller.engageModuleGlobally(cmbModule.getSelectedItem().toString()))
-					lblResult.setText(cmbModule.getSelectedItem().toString() + " module engaged successfully");
-				else {
-					lblResult.setText("Error engaging module.");
+			JButton newButton = new JButton("Engage");
+			newButton.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent ae)
+				{
+					if (controller.engageModuleGlobally(cmbModule
+							.getSelectedItem().toString()))
+					{
+						JOptionPane.showMessageDialog(null,
+								"Module successfully engaged.",
+								"Engage Module Globally",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,
+								"Error engaging module.",
+								"Engage Module Globally",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
-				lblResult.setVisible(true);
-			}
+			});
+			newPanel.add(newButton);
+		}
+		else
+		{
+			newLabel = new JLabel("No available module");
+			add(newLabel);
 		}
 	}
-
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
