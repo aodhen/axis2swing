@@ -1,167 +1,126 @@
 package axis2swing.ui.content;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JTextPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import axis2swing.data.Service;
-import axis2swing.ui.Axis2SwingUIController;
+import axis2swing.ui.Axis2SwingController;
 
-public class DeactivateServicePanel extends PanelContent implements MouseListener{
+public class DeactivateServicePanel extends PanelContent
+{
+	private static final long serialVersionUID = 1L;
 
-	private JButton btnDeactivate;
-	
-	private JComboBox cmbService;
-	
-	private JLabel lblNoService;
-	private JLabel lblResult;
-	
-	public DeactivateServicePanel(Axis2SwingUIController controller) {
+	private JComboBox cmbActiveService;
+	private JPanel panSelectService;
+
+	public DeactivateServicePanel(Axis2SwingController controller)
+	{
 		super(controller);
 	}
 
 	@Override
-	protected void loadComponent() {
-		setLayout(null);
-		{
-			JLabel lblHeader = new JLabel();
-			lblHeader.setLayout(null);
-			this.add(lblHeader);
-			lblHeader.setText("Deactivate Service");
-			lblHeader.setBounds(12, 12, 478, 15);
-			lblHeader.setFont(new java.awt.Font("Dialog",1,20));
-		}
-		{
-			JTextPane txtInstruction = new JTextPane();
-			this.add(txtInstruction);
-			txtInstruction.setText("Only the services that are active are listed below. Note that although you can activate a service from this page, once system is restarted the service will be active again");
-			txtInstruction.setBounds(12, 39, 976, 37);
-		}
-		{
-			JLabel lblSelectService = new JLabel();
-			this.add(lblSelectService);
-			lblSelectService.setText("Select Service");
-			lblSelectService.setBounds(12, 88, 120, 15);
-		}
-		{
-			btnDeactivate = new JButton();
-			this.add(btnDeactivate);
-			btnDeactivate.addMouseListener(this);
-			btnDeactivate.setText("Deactivate");
-			btnDeactivate.setBounds(144, 118, 74, 22);
-			btnDeactivate.setSize(150, 22);
-		}
-		{
-			lblNoService = new JLabel("No active services present.");
-			lblNoService.setBounds(144, 84, 100, 22);
-			add(lblNoService);
-			lblNoService.setVisible(false);
-		}
-		{
-			List<Service> lstActiveService = controller.getActiveServices();
-			
-			if(lstActiveService != null && !lstActiveService.isEmpty()) {
-				
-				String[] serviceNames = new String[lstActiveService.size()];
-				
-				for(int i = 0; i< lstActiveService.size(); i++) {
-					serviceNames[i] = lstActiveService.get(i).getName();
-				}
-				
-				ComboBoxModel cmbServiceModel = 
-					new DefaultComboBoxModel(serviceNames);
-				cmbService = new JComboBox();
-				this.add(cmbService);
-				cmbService.setModel(cmbServiceModel);
-				cmbService.setBounds(144, 84, 247, 22);
-				
-				btnDeactivate.setEnabled(true);
-				
-				lblResult = new JLabel();
-				lblResult.setBounds(144, 143, 800, 22);
-				lblResult.setVisible(false);
-				add(lblResult);
-			}
-			else
-			{
-				btnDeactivate.setEnabled(false);
-			}
-		}
-		
+	protected void initGUI()
+	{
+		setHeader("Deactivate Service");
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+		String message = "<html><p>Only the services that are active are listed below. "
+				+ "Note that although you can deactivate a service from this page, "
+				+ "once system is restarted the service will be active again</p></html>";
+
+		JLabel newLabel = new JLabel(message);
+		newLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		add(newLabel);
+
+		panSelectService = new JPanel();
+		panSelectService.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panSelectService.setBackground(Color.white);
+		panSelectService.setLayout(new FlowLayout(FlowLayout.LEADING));
+		panSelectService.setMaximumSize(new Dimension(800, 40));
+		add(panSelectService);
+
+		displayActiveServices();
 	}
-	
-	private void refresh() {
+
+	private void displayActiveServices()
+	{
 		List<Service> lstActiveService = controller.getActiveServices();
-		
-		if(lstActiveService != null && !lstActiveService.isEmpty()) {
-			
+
+		if (lstActiveService != null && !lstActiveService.isEmpty())
+		{
+			JLabel newLabel = new JLabel("Select Service");
+			panSelectService.add(newLabel);
+
 			String[] serviceNames = new String[lstActiveService.size()];
-			
-			for(int i = 0; i< lstActiveService.size(); i++) {
+
+			for (int i = 0; i < lstActiveService.size(); i++)
+			{
 				serviceNames[i] = lstActiveService.get(i).getName();
 			}
-			
-			ComboBoxModel cmbServiceModel = 
-				new DefaultComboBoxModel(serviceNames);
-			
-			if(lblNoService != null)
-				lblNoService.setVisible(false);
-			cmbService.setVisible(false);
-			cmbService.setModel(cmbServiceModel);
-			cmbService.setVisible(true);
-			
-			btnDeactivate.setEnabled(true);
+
+			ComboBoxModel cmbServiceModel = new DefaultComboBoxModel(
+					serviceNames);
+			cmbActiveService = new JComboBox();
+			panSelectService.add(cmbActiveService);
+			cmbActiveService.setAlignmentX(Component.LEFT_ALIGNMENT);
+			cmbActiveService.setMaximumSize(new Dimension(300, 40));
+			cmbActiveService.setModel(cmbServiceModel);
+
+			JButton newButton = new JButton("Deactivate");
+			newButton.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent ae)
+				{
+					if (controller.deactivateService(cmbActiveService
+							.getSelectedItem().toString()))
+					{
+						JOptionPane.showMessageDialog(null,
+								"Service successfully deactivated",
+								"Deactivate Service",
+								JOptionPane.INFORMATION_MESSAGE);
+						refresh();
+					}
+					else
+					{
+						JOptionPane
+								.showMessageDialog(null,
+										"Error deactivating service",
+										"Deactivate Service",
+										JOptionPane.ERROR_MESSAGE);
+					}
+				}
+
+			});
+			add(newButton);
 		}
 		else
 		{
-			cmbService.setVisible(false);
-			lblNoService.setVisible(true);
-			btnDeactivate.setEnabled(false);
+			JLabel newLabel = new JLabel("No active services present");
+			panSelectService.add(newLabel);
 		}
 	}
 
-	public void mouseClicked(MouseEvent me) {
-		if(me.getSource() instanceof JButton) {
-			JButton theButton = (JButton)me.getSource();
-			
-			if(theButton.equals(btnDeactivate)) {
-				if(controller.deactivateService(cmbService.getSelectedItem().toString())) {
-					lblResult.setText(cmbService.getSelectedItem().toString() + " service deactivated");
-				}
-				else {
-					lblResult.setText("Cannot deactivate service");
-				}
-				lblResult.setVisible(true);
-				refresh();
-			}
-		}
-	}
+	private void refresh()
+	{
+		panSelectService.setVisible(false);
+		panSelectService.removeAll();
 
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+		displayActiveServices();
 
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		panSelectService.setVisible(true);
 	}
-
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

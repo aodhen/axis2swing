@@ -1,39 +1,40 @@
 package axis2swing.ui.content;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
-import axis2swing.ui.Axis2SwingUIController;
+import axis2swing.ui.Axis2SwingController;
 
-public abstract class PanelContent extends JPanel {
+public abstract class PanelContent extends JPanel
+{
+	private static final long serialVersionUID = 1L;
 
-	protected static final long serialVersionUID = 1L;
-	
-	protected Axis2SwingUIController controller;
-	
-	public PanelContent(Axis2SwingUIController controller) {
+	protected Axis2SwingController controller;
+
+	public PanelContent(Axis2SwingController controller)
+	{
 		this.controller = controller;
-		this.setBackground(Color.white);
-		this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.black));
-		this.setLayout(null);
-		loadComponent();
+		setBackground(Color.white);
+		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		setLayout(null);
+		initGUI();
 	}
-	
-	protected abstract void loadComponent();
-	
-	protected void setHeader(String text) {
-		JLabel lblHeader = new JLabel();
-		this.add(lblHeader);
+
+	protected abstract void initGUI();
+
+	protected void setHeader(String text)
+	{
+		JLabel lblHeader = new JLabel(text);
 		lblHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblHeader.setText(text);
-		lblHeader.setBounds(12, 12, 688, 25);
-		lblHeader.setFont(new java.awt.Font("Dialog",1,20));
-		lblHeader.setVerticalAlignment(SwingConstants.TOP);
-		lblHeader.setVerticalTextPosition(SwingConstants.TOP);
+		Font font = lblHeader.getFont();
+		font = new Font(font.getName(), Font.BOLD, 20);
+		lblHeader.setFont(font);
+		add(lblHeader, BorderLayout.PAGE_START);
 	}
 }
