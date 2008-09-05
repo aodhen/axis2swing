@@ -23,6 +23,6 @@ public class EngageModuleForServicePanel extends PanelContent{
 	}
 
 	@Override
-	protected void loadComponent() {
+	protected void initGUI() {
 	}
 }
