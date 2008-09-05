@@ -11,6 +11,8 @@ import axis2swing.ui.Axis2SwingController;
 
 public class GloballyEngagedModulePanel extends PanelContent{
 
+	private static final long serialVersionUID = 1L;
+	
 	public GloballyEngagedModulePanel(Axis2SwingController controller) {
 		super(controller);
 	}
