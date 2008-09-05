@@ -31,7 +31,7 @@ import axis2swing.ui.content.AvailableServicesPanel;
 import axis2swing.ui.content.DeactivateServicePanel;
 import axis2swing.ui.content.EngageModuleGloballyPanel;
 import axis2swing.ui.content.GlobalExecutionChainsPanel;
-import axis2swing.ui.content.GloballyEngagedModulesPanel;
+import axis2swing.ui.content.GloballyEngagedModulePanel;
 import axis2swing.ui.content.PanelContent;
 import axis2swing.ui.content.UploadServicePanel;
 import axis2swing.ui.content.WelcomePanel;
@@ -286,7 +286,7 @@ public class Axis2SwingUI implements ActionListener
 		}
 		else if (ae.getActionCommand().equals("viewGlobalModules"))
 		{
-			displayNewContent(new GloballyEngagedModulesPanel(controller));
+			displayNewContent(new GloballyEngagedModulePanel(controller));
 		}
 		else if (ae.getActionCommand().equals("viewPhases"))
 		{

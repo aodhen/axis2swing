@@ -15,7 +15,10 @@ import axis2swing.data.Module;
 import axis2swing.data.Service;
 import axis2swing.ui.Axis2SwingController;
 
-public class EngageModuleForServicePanel extends PanelContent{
+public class EngageModuleForServicePanel extends PanelContent
+{
+	
+	private static final long serialVersionUID = 1L;
 	
 	public EngageModuleForServicePanel(Axis2SwingController controller) {
 		super(controller);

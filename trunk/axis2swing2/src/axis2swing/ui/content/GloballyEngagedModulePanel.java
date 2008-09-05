@@ -7,15 +7,19 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
 import axis2swing.data.Module;
-import axis2swing.ui.Axis2SwingUIController;
+import axis2swing.ui.Axis2SwingController;
 
 public class GloballyEngagedModulePanel extends PanelContent{
 
-	public GloballyEngagedModulePanel(Axis2SwingUIController controller) {
+	public GloballyEngagedModulePanel(Axis2SwingController controller) {
 		super(controller);
 	}
-
+	
 	@Override
+	protected void initGUI() {
+	}
+
+	//@Override
 	protected void loadComponent() {
 		List<Module> lstModules = new LinkedList<Module>();
 		lstModules = controller.getAvailableModules();
