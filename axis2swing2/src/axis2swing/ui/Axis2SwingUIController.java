@@ -12,7 +12,7 @@ import axis2swing.data.Service;
 import axis2swing.data.ServiceGroup;
 import axis2swing.data.UserRole;
 
-public class Axis2SwingController
+public class Axis2SwingUIController
 {
 	private String username;
 	private UserRole userRole;
