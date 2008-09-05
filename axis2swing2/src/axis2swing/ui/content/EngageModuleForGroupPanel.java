@@ -13,11 +13,11 @@ import javax.swing.JTextPane;
 
 import axis2swing.data.Module;
 import axis2swing.data.ServiceGroup;
-import axis2swing.ui.Axis2SwingUIController;
+import axis2swing.ui.Axis2SwingController;
 
 public class EngageModuleForGroupPanel extends PanelContent{
 	
-	public EngageModuleForGroupPanel(Axis2SwingUIController controller) {
+	public EngageModuleForGroupPanel(Axis2SwingController controller) {
 		super(controller);
 		// TODO Auto-generated constructor stub
 	}
