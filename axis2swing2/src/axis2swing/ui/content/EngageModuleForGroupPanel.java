@@ -17,6 +17,8 @@ import axis2swing.ui.Axis2SwingController;
 
 public class EngageModuleForGroupPanel extends PanelContent{
 	
+	private static final long serialVersionUID = 1L;
+	
 	public EngageModuleForGroupPanel(Axis2SwingController controller) {
 		super(controller);
 		// TODO Auto-generated constructor stub
