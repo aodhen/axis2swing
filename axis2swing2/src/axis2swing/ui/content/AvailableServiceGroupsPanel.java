@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -13,16 +14,21 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.axis2.description.AxisModule;
+import org.apache.axis2.description.AxisOperation;
+import org.apache.axis2.description.AxisService;
+import org.apache.axis2.description.AxisServiceGroup;
+
 import axis2swing.data.Service;
 import axis2swing.data.ServiceGroup;
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class AvailableServiceGroupsPanel extends PanelContent
 {
 
 	private static final long serialVersionUID = 1L;
 
-	public AvailableServiceGroupsPanel(Axis2SwingController controller)
+	public AvailableServiceGroupsPanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}
@@ -30,43 +36,44 @@ public class AvailableServiceGroupsPanel extends PanelContent
 	@Override
 	protected void initGUI()
 	{
-		List<ServiceGroup> lstGroup = controller.getAvailableServiceGroups();
+		Iterator lstGroup = controller.getAvailableServiceGroups();
 
-		if (lstGroup != null && !lstGroup.isEmpty())
+		if (lstGroup != null)
 		{
 			setHeader("Available Service Groups");
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-			for (int i = 0; i < lstGroup.size(); i++)
+			while (lstGroup.hasNext())
 			{
-				ServiceGroup theGroup = lstGroup.get(i);
-				String message = "<html><h2>" + theGroup.getName()
+				AxisServiceGroup theGroup = (AxisServiceGroup)lstGroup.next();
+				String message = "<html><h2>" + theGroup.getServiceGroupName()
 						+ "</h2></html>";
 
 				JLabel newLabel = new JLabel(message);
 				add(newLabel);
-
-				if (theGroup.getServices() != null
-						&& !theGroup.getServices().isEmpty())
+				
+				Iterator services = theGroup.getServices(); 
+				if ( services != null)
 				{
-					for (int j = 0; j < theGroup.getServices().size(); j++)
+					while (services.hasNext())
 					{
-						displayService(theGroup.getServices().get(j));
+						displayService((AxisService)services.next());
 					}
 				}
 
-				if (theGroup.getModules() != null
-						&& !theGroup.getModules().isEmpty())
+				if (theGroup.getEngagedModules() != null
+						&& !theGroup.getEngagedModules().isEmpty())
 				{
 					message = "<html><i>Engaged modules</i></html>";
 
 					newLabel = new JLabel(message);
 					add(newLabel);
 
-					for (int j = 0; j < theGroup.getModules().size(); j++)
+					for (Iterator modules = theGroup.getEngagedModules().iterator(); modules.hasNext();)
 					{
+						AxisModule module = (AxisModule) modules.next();
 						message = "<html><ul><li>"
-								+ theGroup.getModules().get(i).getName()
+								+ module.getName()
 								+ "</li></ul></html>";
 
 						newLabel = new JLabel(message);
@@ -81,9 +88,9 @@ public class AvailableServiceGroupsPanel extends PanelContent
 		}
 	}
 
-	private void displayService(Service service)
+	private void displayService(AxisService service)
 	{
-		final Service theService = service;
+		final AxisService theService = service;
 
 		JPanel newPanel = new JPanel();
 		newPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -108,7 +115,7 @@ public class AvailableServiceGroupsPanel extends PanelContent
 		newPanel.add(newButton);
 	}
 
-	private void displaySingleService(Service service)
+	private void displaySingleService(AxisService service)
 	{
 		setVisible(false);
 		removeAll();
@@ -123,12 +130,12 @@ public class AvailableServiceGroupsPanel extends PanelContent
 		add(newLabel);
 
 		message = "<html><font color=\"blue\">Service EPR : </font><font color=\"black\">"
-				+ service.getEpr() + "</font><br></html>";
+				+ service.getEndpointURL() + "</font><br></html>";
 		newLabel = new JLabel(message);
 		add(newLabel);
 
 		message = "<html><h4>Service Description : <font color=\"black\">"
-				+ service.getDescription() + "</font></h4></html>";
+				+ service.getDocumentation() + "</font></h4></html>";
 		newLabel = new JLabel(message);
 		add(newLabel);
 
@@ -140,18 +147,19 @@ public class AvailableServiceGroupsPanel extends PanelContent
 		message += "</font></i><br></html>";
 		newLabel = new JLabel(message);
 		add(newLabel);
-
-		if (service.getOperations() != null
-				&& !service.getOperations().isEmpty())
+		
+		Iterator operations = service.getOperations();
+		if ( operations != null)
 		{
 			message = "<html><i>Available operations</i></html>";
 			newLabel = new JLabel(message);
 			add(newLabel);
 
-			for (int i = 0; i < service.getOperations().size(); i++)
+			while(operations.hasNext())
 			{
+				AxisOperation operation = (AxisOperation) operations.next();
 				message = "<html><ul><li>"
-						+ service.getOperations().get(i).getName()
+						+ operation.getName().getLocalPart()
 						+ "</li></ul></html>";
 				newLabel = new JLabel(message);
 				add(newLabel);

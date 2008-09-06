@@ -5,15 +5,17 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
-import axis2swing.data.Phase;
-import axis2swing.data.PhaseInfo;
-import axis2swing.ui.Axis2SwingController;
+import org.apache.axis2.deployment.DeploymentException;
+import org.apache.axis2.deployment.util.PhasesInfo;
+import org.apache.axis2.engine.Phase;
+
+import axis2swing.ui.Axis2SwingUIController;
 
 public class AvailablePhasesPanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
-	public AvailablePhasesPanel(Axis2SwingController controller)
+	public AvailablePhasesPanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}
@@ -21,20 +23,16 @@ public class AvailablePhasesPanel extends PanelContent
 	@Override
 	protected void initGUI()
 	{
-		PhaseInfo systemDefined = controller.getSystemDefinedPhaseInfo();
-		PhaseInfo userDefined = controller.getUserDefinedPhaseInfo();
-
-		if (systemDefined != null || userDefined != null)
+		PhasesInfo phasesInfo = controller.getPhaseInfo();
+		
+		if (phasesInfo != null)
 		{
 			setHeader("Available Phases");
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			
+				displayPhaseInfo(phasesInfo);
 
-			if (systemDefined != null)
-				displayPhaseInfo(systemDefined, "System Defined Phases");
-
-			if (userDefined != null)
-				displayPhaseInfo(userDefined, "User Defined Phases");
-
+				
 		}
 		else
 		{
@@ -42,26 +40,61 @@ public class AvailablePhasesPanel extends PanelContent
 		}
 	}
 
-	private void displayPhaseInfo(PhaseInfo phaseInfo, String title)
+	private void displayPhaseInfo(PhasesInfo phasesInfo)
 	{
-		String message = "<html><h2><font color=\"blue\">" + title
+		String message = "<html><h2><font color=\"blue\">" + "System Defined Phases"
 				+ "</font></h2></html>";
 
 		JLabel lblMessage = new JLabel(message);
 		add(lblMessage);
+		
+		try {
+			
+			List<Phase> lstPhase = phasesInfo.getGlobalInflow();
+			displayPhases(lstPhase, "InFlow Up to Dispatcher");
+	
+			lstPhase = phasesInfo.getGlobalInFaultPhases();
+			displayPhases(lstPhase, "InFaultFlow");
+	
+			lstPhase = phasesInfo.getGlobalOutPhaseList();
+			displayPhases(lstPhase, "OutFlow");
 
-		List<Phase> lstPhase = phaseInfo.getInFlowPhases();
-		displayPhases(lstPhase, "InFlow Up to Dispatcher");
+		
+			lstPhase = phasesInfo.getOUT_FaultPhases();
+			displayPhases(lstPhase, "OutFaultFlow");
 
-		lstPhase = phaseInfo.getInFaultFlowPhases();
-		displayPhases(lstPhase, "InFaultFlow");
+		} catch (DeploymentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		message = "<html><h2><font color=\"blue\">" + "User Defined Phases"
+		+ "</font></h2></html>";
 
-		lstPhase = phaseInfo.getOutFlowPhases();
-		displayPhases(lstPhase, "OutFlow");
+		lblMessage = new JLabel(message);
+		add(lblMessage);
+		
+		try {
+			
+			List<Phase> lstPhase = phasesInfo.getOperationInPhases();
+			displayPhases(lstPhase, "InFlow Up to Dispatcher");
+		
+			lstPhase = phasesInfo.getOperationInFaultPhases();
+			displayPhases(lstPhase, "InFaultFlow");
+		
+			lstPhase = phasesInfo.getOperationOutPhases();
+			displayPhases(lstPhase, "OutFlow");
+		
+		
+			lstPhase = phasesInfo.getOperationOutFaultPhases();
+			displayPhases(lstPhase, "OutFaultFlow");
+		
+		} catch (DeploymentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		lstPhase = phaseInfo.getOutFaultFlowPhases();
-		displayPhases(lstPhase, "OutFaultFlow");
-	}
+}
 
 	private void displayPhases(List<Phase> lstPhase, String title)
 	{
@@ -71,7 +104,7 @@ public class AvailablePhasesPanel extends PanelContent
 
 			for (int i = 0; i < lstPhase.size(); i++)
 			{
-				message += lstPhase.get(i).getName() + "<br>";
+				message += lstPhase.get(i).getPhaseName() + "<br>";
 			}
 
 			message += "</blockquote></html>";

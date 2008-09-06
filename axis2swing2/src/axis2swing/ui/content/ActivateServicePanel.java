@@ -17,17 +17,20 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.axis2.description.AxisService;
+
 import axis2swing.data.Service;
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class ActivateServicePanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
+	private JButton btnActivate;
 	private JComboBox cmbInactiveService;
 	private JPanel panSelectService;
 
-	public ActivateServicePanel(Axis2SwingController controller)
+	public ActivateServicePanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}
@@ -58,19 +61,14 @@ public class ActivateServicePanel extends PanelContent
 
 	private void displayInactiveServices()
 	{
-		List<Service> lstInactiveService = controller.getInactiveServices();
+		List<AxisService> lstInactiveService = controller.getInactiveServices();
 
 		if (lstInactiveService != null && !lstInactiveService.isEmpty())
 		{
 			JLabel newLabel = new JLabel("Select Service");
 			panSelectService.add(newLabel);
 
-			String[] serviceNames = new String[lstInactiveService.size()];
-
-			for (int i = 0; i < lstInactiveService.size(); i++)
-			{
-				serviceNames[i] = lstInactiveService.get(i).getName();
-			}
+			String[] serviceNames = getServiceNames(lstInactiveService);
 
 			ComboBoxModel cmbServiceModel = new DefaultComboBoxModel(
 					serviceNames);
@@ -80,8 +78,8 @@ public class ActivateServicePanel extends PanelContent
 			cmbInactiveService.setMaximumSize(new Dimension(300, 40));
 			cmbInactiveService.setModel(cmbServiceModel);
 
-			JButton newButton = new JButton("Activate");
-			newButton.addActionListener(new ActionListener() {
+			btnActivate = new JButton("Activate");
+			btnActivate.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent ae)
 				{
@@ -103,7 +101,7 @@ public class ActivateServicePanel extends PanelContent
 				}
 
 			});
-			add(newButton);
+			add(btnActivate);
 		}
 		else
 		{
@@ -117,8 +115,12 @@ public class ActivateServicePanel extends PanelContent
 		panSelectService.setVisible(false);
 		panSelectService.removeAll();
 
+		setVisible(false);
+		remove(btnActivate);
+
 		displayInactiveServices();
 
+		setVisible(true);
 		panSelectService.setVisible(true);
 	}
 }

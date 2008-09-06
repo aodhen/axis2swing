@@ -5,16 +5,18 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
-import axis2swing.data.Handler;
-import axis2swing.data.Phase;
-import axis2swing.data.PhaseInfo;
-import axis2swing.ui.Axis2SwingController;
+import org.apache.axis2.engine.AxisConfiguration;
+import org.apache.axis2.engine.Handler;
+import org.apache.axis2.engine.Phase;
+
+
+import axis2swing.ui.Axis2SwingUIController;
 
 public class GlobalExecutionChainsPanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
-	public GlobalExecutionChainsPanel(Axis2SwingController controller)
+	public GlobalExecutionChainsPanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}
@@ -22,25 +24,20 @@ public class GlobalExecutionChainsPanel extends PanelContent
 	@Override
 	protected void initGUI()
 	{
-		PhaseInfo globalChains = controller.getGlobalExecutionChains();
+		AxisConfiguration axisConfiguration = controller.getAxisConfiguration();
 
-		if (globalChains != null)
-		{
+	
 			setHeader("View Global Execution Chains");
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-			displayExecutionChains(globalChains.getInFlowPhases(),
+			displayExecutionChains(axisConfiguration.getInFlowPhases(),
 					"In Flow Up To and Including Dispatcher");
-			displayExecutionChains(globalChains.getInFaultFlowPhases(),
+			displayExecutionChains(axisConfiguration.getInFaultFlowPhases(),
 					"In Fault Flow");
-			displayExecutionChains(globalChains.getOutFlowPhases(), "Out Flow");
-			displayExecutionChains(globalChains.getOutFaultFlowPhases(),
+			displayExecutionChains(axisConfiguration.getOutFlowPhases(), "Out Flow");
+			displayExecutionChains(axisConfiguration.getOutFaultFlowPhases(),
 					"Out Fault Flow");
-		}
-		else
-		{
-			setHeader("No global execution chains");
-		}
+		
 	}
 
 	private void displayExecutionChains(List<Phase> lstPhase, String title)
@@ -51,6 +48,7 @@ public class GlobalExecutionChainsPanel extends PanelContent
 
 			for (int i = 0; i < lstPhase.size(); i++)
 			{
+				//System.out.println("i=" +i);
 				Phase phase = lstPhase.get(i);
 
 				message += "<li>Phase Name: " + phase.getName();
@@ -63,8 +61,9 @@ public class GlobalExecutionChainsPanel extends PanelContent
 
 					for (int j = 0; j < lstHandler.size(); j++)
 					{
+						//System.out.println("j=" + j);
 						message += "<li>Handler Name: "
-								+ lstHandler.get(i).getName() + "</li>";
+								+ lstHandler.get(j).getName() + "</li>";
 					}
 
 					message += "</ul>";

@@ -3,13 +3,13 @@ package axis2swing.ui.content;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class WelcomePanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
-	public WelcomePanel(Axis2SwingController controller)
+	public WelcomePanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}

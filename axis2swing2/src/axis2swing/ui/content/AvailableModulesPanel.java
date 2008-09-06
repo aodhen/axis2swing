@@ -1,18 +1,23 @@
 package axis2swing.ui.content;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
+import org.apache.axis2.description.AxisModule;
+
+import java.util.Iterator;
+
 import axis2swing.data.Module;
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class AvailableModulesPanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
-	public AvailableModulesPanel(Axis2SwingController controller)
+	public AvailableModulesPanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 		// TODO Auto-generated constructor stub
@@ -21,7 +26,7 @@ public class AvailableModulesPanel extends PanelContent
 	@Override
 	protected void initGUI()
 	{
-		List<Module> lstModule = controller.getAvailableModules();
+		Collection lstModule = controller.getAvailableModules();
 
 		if (lstModule == null || (lstModule != null && lstModule.isEmpty()))
 		{
@@ -34,11 +39,12 @@ public class AvailableModulesPanel extends PanelContent
 
 			String message = "<html><ul>";
 
-			for (int i = 0; i < lstModule.size(); i++)
+			
+			for (Iterator modules = lstModule.iterator(); modules.hasNext();)
 			{
-				Module module = lstModule.get(i);
+				AxisModule module = (AxisModule) modules.next();
 				message += "<li><b>" + module.getName() + "</b>: "
-						+ module.getDescription() + "</li>";
+						+ module.getModuleDescription() + "</li>";
 			}
 
 			message += "</ul></html>";

@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -17,13 +18,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import axis2swing.data.Module;
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class EngageModuleGloballyPanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
-	public EngageModuleGloballyPanel(Axis2SwingController controller)
+	public EngageModuleGloballyPanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}
@@ -42,7 +43,7 @@ public class EngageModuleGloballyPanel extends PanelContent
 		JLabel newLabel = new JLabel(message);
 		add(newLabel);
 
-		List<Module> lstModule = controller.getAvailableModules();
+		Collection lstModule = controller.getAvailableModules();
 		if (lstModule != null && !lstModule.isEmpty())
 		{
 			JPanel newPanel = new JPanel();
@@ -53,10 +54,7 @@ public class EngageModuleGloballyPanel extends PanelContent
 
 			newLabel = new JLabel("Select Module");
 
-			String[] moduleNames = new String[lstModule.size()];
-
-			for (int i = 0; i < lstModule.size(); i++)
-				moduleNames[i] = lstModule.get(i).getName();
+			String[] moduleNames = getModuleNames(lstModule);
 
 			ComboBoxModel cmbModuleModel = new DefaultComboBoxModel(moduleNames);
 
@@ -78,6 +76,8 @@ public class EngageModuleGloballyPanel extends PanelContent
 								"Module successfully engaged.",
 								"Engage Module Globally",
 								JOptionPane.INFORMATION_MESSAGE);
+
+						cmbModule.setSelectedIndex(0);
 					}
 					else
 					{
