@@ -1,7 +1,12 @@
 package axis2swing.ui;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.axis2.deployment.util.PhasesInfo;
 
 import axis2swing.data.Handler;
 import axis2swing.data.Module;
@@ -11,29 +16,55 @@ import axis2swing.data.PhaseInfo;
 import axis2swing.data.Service;
 import axis2swing.data.ServiceGroup;
 import axis2swing.data.UserRole;
+import axis2swing.middleware.Axis2AdminManager;
+import axis2swing.middleware.UserAuthentication;
 
 public class Axis2SwingUIController
 {
 	private String username;
 	private UserRole userRole;
+	private Axis2AdminManager adminManager;
 
-	public boolean login(String username, char[] password)
+	public void setAdminManger(Axis2AdminManager adminManger) {
+		this.adminManager = adminManger;
+	}
+
+	public boolean login(String username, char[] password, String role)
 	{
 		this.username = username;
+		
 		// TODO check username and password
-
+		String pass = "";
+		for (int i=0; i < password.length; i++) {
+			pass = pass + Character.toString(password[i]);
+		}
+		
 		// TODO get the user role
-
+		//System.out.println (username + pass + role);
+		int roleIndex = UserAuthentication.performAuthentication(username, pass, role);
+		//System.out.println("roleIndex" + roleIndex);
+		if(roleIndex > -1) {
+			if(roleIndex == UserAuthentication.USER) {
+				setUserRole(UserRole.User);
+			}
+			else if (roleIndex == UserAuthentication.MANAGER) {
+				setUserRole(UserRole.Manager);
+			}
+			else if (roleIndex == UserAuthentication.ADMINISTRATOR){
+				setUserRole(UserRole.Admin);
+			}
+			return true;
+		}
 		// TODO remove this stub
-		setUserRole(UserRole.Admin);
+		//setUserRole(role);
 
-		return true;
+		return false;
 	}
 
 	public boolean uploadService(String serviceFilePath)
 	{
-		// TODO upload service
-
+		adminManager.processUploadFile(serviceFilePath);
+		
 		return true;
 	}
 
@@ -47,70 +78,21 @@ public class Axis2SwingUIController
 		return userRole;
 	}
 
-	public List<Module> getAvailableModules()
+	public Collection getAvailableModules()
 	{
-		List<Module> lstModule = new LinkedList<Module>();
-
-		// TODO get available modules
-
-		// TODO remove this stub
-		lstModule.add(new Module("script"));
-		lstModule.add(new Module("metadataExchange"));
-		lstModule
-				.add(new Module(
-						"addressing",
-						"This is the WS-Addressing implementation on Axis2, supporting the "
-								+ "WS-Addressing 1.0 Recommendation, as well as the Submission version (2004/08)."));
-
+		Collection lstModule = adminManager.getModules();
 		return lstModule;
 	}
 
-	public List<Module> getGloballyEngagedModules()
+	public Collection getGloballyEngagedModules()
 	{
-		List<Module> lstModule = new LinkedList<Module>();
-
-		// TODO get globally engaged modules
-
-		// TODO remove this stub
-		lstModule.add(new Module("script"));
-		lstModule.add(new Module("metadataExchange"));
-		lstModule
-				.add(new Module(
-						"addressing",
-						"This is the WS-Addressing implementation on Axis2, supporting the "
-								+ "WS-Addressing 1.0 Recommendation, as well as the Submission version (2004/08)."));
-
+		Collection lstModule = adminManager.getGlobalModules();
 		return lstModule;
 	}
 
-	public PhaseInfo getSystemDefinedPhaseInfo()
+	public PhasesInfo getPhaseInfo()
 	{
-		PhaseInfo phaseInfo = new PhaseInfo();
-
-		// TODO get system defined phase info
-
-		// TODO remove this stub
-		phaseInfo.addInFlowPhase(new Phase("Transport"));
-		phaseInfo.addInFaultFlowPhase(new Phase("PreDispatch"));
-		phaseInfo.addOutFlowPhase(new Phase("MessageOut"));
-		phaseInfo.addOutFaultFlowPhase(new Phase("Security"));
-
-		return phaseInfo;
-	}
-
-	public PhaseInfo getUserDefinedPhaseInfo()
-	{
-		PhaseInfo phaseInfo = new PhaseInfo();
-
-		// TODO get user defined phase info
-
-		// TODO remove this stub
-		phaseInfo.addInFlowPhase(new Phase("RMPhase"));
-		phaseInfo.addInFaultFlowPhase(new Phase("OperationInFaultPhase"));
-		phaseInfo.addOutFlowPhase(new Phase("soapmonitorPhase"));
-		phaseInfo.addOutFaultFlowPhase(new Phase("PolicyDetermination"));
-
-		return phaseInfo;
+		return adminManager.getPhases();
 	}
 
 	public PhaseInfo getGlobalExecutionChains()
@@ -136,20 +118,9 @@ public class Axis2SwingUIController
 		return phaseInfo;
 	}
 
-	public List<Service> getAvailableServices()
+	public Collection getAvailableServices()
 	{
-		List<Service> lstService = new LinkedList<Service>();
-
-		// TODO get available services
-
-		// TODO remove this stub
-		Service newService = new Service("Version",
-				"http://localhost:8080/axis2/services/Version", true);
-		newService.addModule(new Module("addressing"));
-		Operation newOperation = new Operation("getVersion");
-		newOperation.addModule(new Module("addressing"));
-		newService.addOperation(newOperation);
-		lstService.add(newService);
+		Collection lstService = adminManager.getAxisServices();
 
 		return lstService;
 	}
@@ -172,23 +143,10 @@ public class Axis2SwingUIController
 		return true;
 	}
 
-	public List<ServiceGroup> getAvailableServiceGroups()
+	public Iterator getAvailableServiceGroups()
 	{
 
-		List<ServiceGroup> lstGroup = new LinkedList<ServiceGroup>();
-
-		// TODO get available service group
-
-		// TODO remove this stub
-		{
-			Service newService = new Service("Version",
-					"http://localhost:8080/axis2/services/Version", true);
-			newService.addOperation(new Operation("getVersion"));
-			ServiceGroup newGroup = new ServiceGroup("version-1.4");
-			newGroup.addService(newService);
-			newGroup.addModule(new Module("addressing"));
-			lstGroup.add(newGroup);
-		}
+		Iterator lstGroup = adminManager.getServiceGroups();
 
 		return lstGroup;
 	}
@@ -199,10 +157,7 @@ public class Axis2SwingUIController
 
 		// TODO get active services
 
-		// TODO remove this stub
-		{
-			lstService = getAvailableServices();
-		}
+	
 
 		return lstService;
 	}
@@ -213,10 +168,7 @@ public class Axis2SwingUIController
 
 		// TODO get inactive services
 
-		// TODO remove this stub
-		{
-			lstService = getAvailableServices();
-		}
+
 
 		return lstService;
 	}
