@@ -2,6 +2,7 @@ package axis2swing.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -14,6 +15,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -45,6 +47,14 @@ public class Axis2SwingUI implements ActionListener
 	private static final long serialVersionUID = 1L;
 
 	private Axis2SwingUIController controller;
+
+	public Axis2SwingUIController getController() {
+		return controller;
+	}
+
+	public void setController(Axis2SwingUIController controller) {
+		this.controller = controller;
+	}
 
 	private JFrame frame;
 
@@ -122,7 +132,23 @@ public class Axis2SwingUI implements ActionListener
 		gbc.gridy = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		panLogin.add(txtPassword, gbc);
-
+		
+		JLabel lblRoles = new JLabel("Roles:");
+		gbc.anchor = GridBagConstraints.LINE_END;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.fill = GridBagConstraints.NONE;
+		panLogin.add(lblRoles, gbc);
+		
+		String[] roles = {"administrator", "manager", "user"};
+		final JComboBox roleBox = new JComboBox(roles);
+		roleBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		gbc.anchor = GridBagConstraints.LINE_END;
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		panLogin.add(roleBox, gbc);
+		
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
 
@@ -130,13 +156,14 @@ public class Axis2SwingUI implements ActionListener
 			{
 				txtUsername.setText("");
 				txtPassword.setText("");
+				roleBox.setSelectedIndex(0);
 			}
 
 		});
 		btnClear.setActionCommand("clear");
 		gbc.anchor = GridBagConstraints.LINE_START;
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.fill = GridBagConstraints.NONE;
 		panLogin.add(btnClear, gbc);
 
@@ -146,7 +173,7 @@ public class Axis2SwingUI implements ActionListener
 			public void actionPerformed(ActionEvent ae)
 			{
 				if (controller.login(txtUsername.getText(), txtPassword
-						.getPassword()))
+						.getPassword(), (String)roleBox.getSelectedItem()))
 				{
 					displayWelcomePanel();
 				}
@@ -162,7 +189,7 @@ public class Axis2SwingUI implements ActionListener
 		btnLogin.setActionCommand("login");
 		gbc.anchor = GridBagConstraints.LINE_END;
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.fill = GridBagConstraints.NONE;
 		panLogin.add(btnLogin, gbc);
 
@@ -203,6 +230,7 @@ public class Axis2SwingUI implements ActionListener
 		JPanel panSubmenu;
 		if (controller.getUserRole() == UserRole.Admin)
 		{
+			//System.out.println(controller.getUserRole());
 			panSubmenu = createButtonGroup(panMenu, "Tools");
 			createButton(panSubmenu, "Upload Service", "uploadService");
 		}

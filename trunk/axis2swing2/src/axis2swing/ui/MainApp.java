@@ -29,7 +29,7 @@ public class MainApp extends AxisServer {
 
     int port = -1;
 
-    public static int DEFAULT_PORT = 8080;
+    public static int DEFAULT_PORT = 8888;
 
     public MainApp (
             String repoLocation,
@@ -95,9 +95,10 @@ public class MainApp extends AxisServer {
     		{
     			// do nothing
     		}
-    		new Axis2SwingUI();
+    		Axis2SwingUI axis2SwingUI = new Axis2SwingUI();
     	
-             
+    		axis2SwingUI.getController().setAdminManger(manager);
+            
             
                         		
         } catch (Throwable t) {
