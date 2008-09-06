@@ -30,8 +30,12 @@ import axis2swing.ui.content.AvailableServiceGroupsPanel;
 import axis2swing.ui.content.AvailableServicesPanel;
 import axis2swing.ui.content.DeactivateServicePanel;
 import axis2swing.ui.content.EngageModuleGloballyPanel;
+import axis2swing.ui.content.EngageModuleGroupPanel;
+import axis2swing.ui.content.EngageModuleOperationPanel;
+import axis2swing.ui.content.EngageModuleServicePanel;
 import axis2swing.ui.content.GlobalExecutionChainsPanel;
-import axis2swing.ui.content.GloballyEngagedModulePanel;
+import axis2swing.ui.content.GloballyEngagedModulesPanel;
+import axis2swing.ui.content.OperationSpecificChainsPanel;
 import axis2swing.ui.content.PanelContent;
 import axis2swing.ui.content.UploadServicePanel;
 import axis2swing.ui.content.WelcomePanel;
@@ -40,7 +44,7 @@ public class Axis2SwingUI implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
 
-	private Axis2SwingController controller;
+	private Axis2SwingUIController controller;
 
 	private JFrame frame;
 
@@ -51,7 +55,7 @@ public class Axis2SwingUI implements ActionListener
 
 	public Axis2SwingUI()
 	{
-		controller = new Axis2SwingController();
+		controller = new Axis2SwingUIController();
 		initGUI();
 		frame.setVisible(true);
 	}
@@ -286,7 +290,7 @@ public class Axis2SwingUI implements ActionListener
 		}
 		else if (ae.getActionCommand().equals("viewGlobalModules"))
 		{
-			displayNewContent(new GloballyEngagedModulePanel(controller));
+			displayNewContent(new GloballyEngagedModulesPanel(controller));
 		}
 		else if (ae.getActionCommand().equals("viewPhases"))
 		{
@@ -298,7 +302,7 @@ public class Axis2SwingUI implements ActionListener
 		}
 		else if (ae.getActionCommand().equals("viewOperationChains"))
 		{
-
+			displayNewContent(new OperationSpecificChainsPanel(controller));
 		}
 		else if (ae.getActionCommand().equals("engageModuleGlobal"))
 		{
@@ -306,15 +310,15 @@ public class Axis2SwingUI implements ActionListener
 		}
 		else if (ae.getActionCommand().equals("engageModuleGroup"))
 		{
-
+			displayNewContent(new EngageModuleGroupPanel(controller));
 		}
 		else if (ae.getActionCommand().equals("engageModuleService"))
 		{
-
+			displayNewContent(new EngageModuleServicePanel(controller));
 		}
 		else if (ae.getActionCommand().equals("engageModuleOperation"))
 		{
-
+			displayNewContent(new EngageModuleOperationPanel(controller));
 		}
 		else if (ae.getActionCommand().equals("deactivateService"))
 		{
