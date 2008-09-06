@@ -12,9 +12,9 @@ import org.xml.sax.SAXParseException;
 
 public class UserAuthentication{
 
-	public static final int USER = 1;
+	public static final int USER = 3;
 	public static final int MANAGER = 2;
-	public static final int ADMINISTRATOR = 3;
+	public static final int ADMINISTRATOR = 1;
 	
 	public static int performAuthentication(String username, String password, String role){
     
