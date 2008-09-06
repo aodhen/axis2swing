@@ -13,6 +13,8 @@ import org.apache.axis2.description.AxisOperation;
 import org.apache.axis2.description.AxisService;
 import org.apache.axis2.description.AxisServiceGroup;
 
+import java.util.Collection;
+
 import axis2swing.middleware.Axis2AdminManager;
 import junit.framework.TestCase;
 
@@ -99,5 +101,10 @@ public class Axis2AdminManagerTester extends TestCase {
 	public void test_service_groups() {
 		AxisServiceGroup serviceGroup = (AxisServiceGroup)manager.getServiceGroups().next();
 		assertEquals("version", serviceGroup.getServiceGroupName());
+	}
+	
+	public void test_modules() {
+		Collection modules = manager.getModules();
+		assertEquals(7, modules.size());
 	}
 }
