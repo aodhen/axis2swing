@@ -7,6 +7,7 @@ public class Operation
 {
 	private String name;
 	private List<Module> lstModule;
+	private PhaseInfo phaseInfo;
 
 	public Operation(String name)
 	{
@@ -34,5 +35,15 @@ public class Operation
 	public List<Module> getModules()
 	{
 		return this.lstModule;
+	}
+
+	public void setPhaseInfo(PhaseInfo phaseInfo)
+	{
+		this.phaseInfo = phaseInfo;
+	}
+
+	public PhaseInfo getPhaseInfo()
+	{
+		return this.phaseInfo;
 	}
 }
