@@ -19,6 +19,8 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.Iterator;
 
+import javax.swing.UIManager;
+
 import axis2swing.middleware.Axis2AdminManager;
 
 public class MainApp extends AxisServer {
@@ -86,7 +88,15 @@ public class MainApp extends AxisServer {
             
             Axis2AdminManager manager = new Axis2AdminManager(server.getConfigurationContext());
             
-            
+            try
+    		{
+    			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    		} catch (Exception e)
+    		{
+    			// do nothing
+    		}
+    		new Axis2SwingUI();
+    	
              
             
                         		
