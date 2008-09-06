@@ -18,13 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class UploadServicePanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
-	public UploadServicePanel(Axis2SwingController controller)
+	public UploadServicePanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}

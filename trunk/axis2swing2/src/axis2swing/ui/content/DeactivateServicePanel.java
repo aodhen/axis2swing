@@ -17,17 +17,20 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.axis2.description.AxisService;
+
 import axis2swing.data.Service;
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class DeactivateServicePanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
+	private JButton btnDeactivate;
 	private JComboBox cmbActiveService;
 	private JPanel panSelectService;
 
-	public DeactivateServicePanel(Axis2SwingController controller)
+	public DeactivateServicePanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}
@@ -58,19 +61,14 @@ public class DeactivateServicePanel extends PanelContent
 
 	private void displayActiveServices()
 	{
-		List<Service> lstActiveService = controller.getActiveServices();
+		List<AxisService> lstActiveService = controller.getActiveServices();
 
 		if (lstActiveService != null && !lstActiveService.isEmpty())
 		{
 			JLabel newLabel = new JLabel("Select Service");
 			panSelectService.add(newLabel);
 
-			String[] serviceNames = new String[lstActiveService.size()];
-
-			for (int i = 0; i < lstActiveService.size(); i++)
-			{
-				serviceNames[i] = lstActiveService.get(i).getName();
-			}
+			String[] serviceNames = getServiceNames(lstActiveService);
 
 			ComboBoxModel cmbServiceModel = new DefaultComboBoxModel(
 					serviceNames);
@@ -80,8 +78,8 @@ public class DeactivateServicePanel extends PanelContent
 			cmbActiveService.setMaximumSize(new Dimension(300, 40));
 			cmbActiveService.setModel(cmbServiceModel);
 
-			JButton newButton = new JButton("Deactivate");
-			newButton.addActionListener(new ActionListener() {
+			btnDeactivate = new JButton("Deactivate");
+			btnDeactivate.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent ae)
 				{
@@ -105,8 +103,9 @@ public class DeactivateServicePanel extends PanelContent
 				}
 
 			});
-			add(newButton);
+			add(btnDeactivate);
 		}
+
 		else
 		{
 			JLabel newLabel = new JLabel("No active services present");
@@ -119,7 +118,12 @@ public class DeactivateServicePanel extends PanelContent
 		panSelectService.setVisible(false);
 		panSelectService.removeAll();
 
+		setVisible(false);
+		remove(btnDeactivate);
+
 		displayActiveServices();
+
+		setVisible(true);
 
 		panSelectService.setVisible(true);
 	}

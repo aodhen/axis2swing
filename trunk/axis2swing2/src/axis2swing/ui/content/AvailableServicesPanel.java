@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -15,16 +16,22 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.axis2.description.AxisModule;
+import org.apache.axis2.description.AxisOperation;
+import org.apache.axis2.description.AxisService;
+
+import java.util.Iterator;
+
 import axis2swing.data.Module;
 import axis2swing.data.Operation;
 import axis2swing.data.Service;
-import axis2swing.ui.Axis2SwingController;
+import axis2swing.ui.Axis2SwingUIController;
 
 public class AvailableServicesPanel extends PanelContent
 {
 	private static final long serialVersionUID = 1L;
 
-	public AvailableServicesPanel(Axis2SwingController controller)
+	public AvailableServicesPanel(Axis2SwingUIController controller)
 	{
 		super(controller);
 	}
@@ -32,16 +39,17 @@ public class AvailableServicesPanel extends PanelContent
 	@Override
 	protected void initGUI()
 	{
-		List<Service> lstService = controller.getAvailableServices();
+		Collection lstService = controller.getAvailableServices();
 
 		if (lstService != null && !lstService.isEmpty())
 		{
 			setHeader("Available Services");
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
-			for (int i = 0; i < lstService.size(); i++)
-				displayService(lstService.get(i));
-
+			
+			for (Iterator iterator = lstService.iterator(); iterator.hasNext();) {
+				displayService((AxisService)iterator.next());
+			}
+				
 		}
 		else
 		{
@@ -49,15 +57,15 @@ public class AvailableServicesPanel extends PanelContent
 		}
 	}
 
-	private void displayService(Service service)
+	private void displayService(AxisService service)
 	{
 		String message = "<html><h2><font color=\"blue\">"
 				+ service.getName()
 				+ "</font></h2>"
 				+ "<font color=\"blue\">Service EPR : </font><font color=\"black\">"
-				+ service.getEpr() + "</font><br>"
+				+ service.getEndpointURL() + "</font><br>"
 				+ "<h4>Service Description : <font color=\"black\">"
-				+ service.getDescription() + "</font></h4>"
+				+ service.getDocumentation() + "</font></h4>"
 				+ "<i><font color=\"blue\">Service Status : ";
 
 		if (service.isActive())
@@ -79,14 +87,13 @@ public class AvailableServicesPanel extends PanelContent
 			displayModules(service);
 		}
 
-		if (service.getOperations() != null
-				&& !service.getOperations().isEmpty())
+		if (service.getOperations() != null)
 		{
 			displayOperations(service);
 		}
 	}
 
-	private void displayModules(Service service)
+	private void displayModules(AxisService service)
 	{
 		String message = "<html><i>Engaged modules for the service</i></html>";
 
@@ -105,7 +112,8 @@ public class AvailableServicesPanel extends PanelContent
 
 		for (int i = 0; i < service.getModules().size(); i++)
 		{
-			final String moduleName = service.getModules().get(i).getName();
+			AxisModule module = (AxisModule) service.getModules().get(i);
+			final String moduleName = module.getName();
 			message = "<html><ul><li>" + moduleName + "</li></ul></html>";
 
 			newLabel = new JLabel(message);
@@ -140,9 +148,9 @@ public class AvailableServicesPanel extends PanelContent
 		}
 	}
 
-	private void displayOperations(Service service)
+	private void displayOperations(AxisService service)
 	{
-		List<Operation> lstOperation = service.getOperations();
+		Iterator lstOperation = service.getOperations();
 
 		String message = "<html><br><i>Available operations</i></html>";
 
@@ -150,9 +158,9 @@ public class AvailableServicesPanel extends PanelContent
 		newLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(newLabel);
 
-		for (int i = 0; i < lstOperation.size(); i++)
+		while (lstOperation.hasNext())
 		{
-			Operation operation = lstOperation.get(i);
+			AxisOperation operation = (AxisOperation)lstOperation.next();
 			message = "<html><ul><li>" + operation.getName()
 					+ "</li></ul></html>";
 
@@ -160,8 +168,8 @@ public class AvailableServicesPanel extends PanelContent
 			newLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			add(newLabel);
 
-			if (operation.getModules() != null
-					&& !operation.getModules().isEmpty())
+			if (operation.getEngagedModules() != null
+					&& !operation.getEngagedModules().isEmpty())
 			{
 				message = "<html><i>Engaged Modules for the Operation</i></html>";
 
@@ -172,11 +180,11 @@ public class AvailableServicesPanel extends PanelContent
 				add(newLabel);
 
 				final String serviceName = service.getName();
-				final String operationName = operation.getName();
+				final String operationName = operation.getName().getLocalPart();
 
-				for (int j = 0; j < operation.getModules().size(); j++)
+				for (Iterator opModules = operation.getEngagedModules().iterator(); opModules.hasNext();)
 				{
-					Module module = operation.getModules().get(i);
+					AxisModule module = (AxisModule) opModules.next();
 					final String moduleName = module.getName();
 
 					JPanel newPanel = new JPanel();
