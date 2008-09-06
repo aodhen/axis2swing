@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.axis2.deployment.util.PhasesInfo;
+import org.apache.axis2.description.AxisService;
+import org.apache.axis2.engine.AxisConfiguration;
 
 import axis2swing.data.Handler;
 import axis2swing.data.Module;
@@ -129,7 +131,7 @@ public class Axis2SwingUIController
 			String moduleName)
 	{
 
-		// TODO disengage module from service
+		adminManager.processDisengageModuleService(serviceName, moduleName);
 
 		return true;
 	}
@@ -138,7 +140,7 @@ public class Axis2SwingUIController
 			String operationName, String moduleName)
 	{
 
-		// TODO disengage module from operation
+		adminManager.processDisengageModuleOperation(serviceName, operationName, moduleName);
 
 		return true;
 	}
@@ -151,88 +153,85 @@ public class Axis2SwingUIController
 		return lstGroup;
 	}
 
-	public List<Service> getActiveServices()
+	public ArrayList<AxisService> getActiveServices()
 	{
-		List<Service> lstService = new LinkedList<Service>();
-
-		// TODO get active services
-
+		Collection lstService = adminManager.getAxisServices();
+		ArrayList<AxisService> activeServices = new ArrayList<AxisService>();
+		
+		for(Iterator iterator = lstService.iterator(); iterator.hasNext();) {
+			AxisService service = (AxisService) iterator.next();
+			if(service.isActive()) {
+				activeServices.add(service);
+			}
+		}
 	
-
-		return lstService;
+		return activeServices;
 	}
 
-	public List<Service> getInactiveServices()
+	public ArrayList<AxisService> getInactiveServices()
 	{
-		List<Service> lstService = new LinkedList<Service>();
-
-		// TODO get inactive services
-
-
-
-		return lstService;
+		Collection lstService = adminManager.getAxisServices();
+		ArrayList<AxisService> inactiveServices = new ArrayList<AxisService>();
+		
+		for(Iterator iterator = lstService.iterator(); iterator.hasNext();) {
+			AxisService service = (AxisService) iterator.next();
+			if(!service.isActive()) {
+				inactiveServices.add(service);
+			}
+		}
+	
+		return inactiveServices;	
 	}
 
 	public boolean deactivateService(String serviceName)
 	{
-		// TODO deactivate service
+		adminManager.processDeactiveService(serviceName);
 
 		return true;
 	}
 
 	public boolean activateService(String serviceName)
 	{
-		// TODO activate service
+		adminManager.processActiveService(serviceName);
 
 		return true;
 	}
 
 	public boolean engageModuleGlobally(String moduleName)
 	{
-		// TODO engage module globally
+		adminManager.processEngageGlobalModule(moduleName);
 
 		return true;
 	}
-
+	
+	public AxisConfiguration getAxisConfiguration() {
+		return adminManager.getAxisConfiguration();
+	}
+	
 	public boolean engageModuleGroup(String moduleName, String groupName)
 	{
-		// TODO engage module for service group
+		adminManager.processEngageModuleServiceGroup(groupName, moduleName);
 
 		return true;
 	}
 
 	public boolean engageModuleService(String moduleName, String serviceName)
 	{
-		// TODO engage module for service
+		adminManager.processEngageModuleService(serviceName, moduleName);
 
 		return true;
 	}
 
-	public Service getService(String serviceName)
+	public AxisService getService(String serviceName)
 	{
 
-		// TODO get service based on service name
-
-		// TODO remove this stub
-		// {
-		Service newService = new Service("Version",
-				"http://localhost:8080/axis2/services/Version", true);
-		newService.addModule(new Module("addressing"));
-
-		Operation newOperation = new Operation("get Version");
-		newService.addOperation(newOperation);
-
-		PhaseInfo phaseInfo = getGlobalExecutionChains();
-		newOperation.setPhaseInfo(phaseInfo);
-		// }
-
-		return newService;
+		return adminManager.getAxisService(serviceName);
 	}
 
 	public boolean engageModuleOperation(String serviceName, String moduleName,
 			String operationName)
 	{
-		// TODO engage module for an operation
+		adminManager.processEngageModuleOperation(serviceName, operationName, moduleName);
 
 		return true;
 	}
