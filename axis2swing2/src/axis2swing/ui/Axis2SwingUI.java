@@ -31,6 +31,7 @@ import axis2swing.ui.content.AvailablePhasesPanel;
 import axis2swing.ui.content.AvailableServiceGroupsPanel;
 import axis2swing.ui.content.AvailableServicesPanel;
 import axis2swing.ui.content.DeactivateServicePanel;
+import axis2swing.ui.content.EditServiceParametersPanel;
 import axis2swing.ui.content.EngageModuleGloballyPanel;
 import axis2swing.ui.content.EngageModuleGroupPanel;
 import axis2swing.ui.content.EngageModuleOperationPanel;
@@ -260,7 +261,7 @@ public class Axis2SwingUI implements ActionListener
 			panSubmenu = createButtonGroup(panMenu, "Services");
 			createButton(panSubmenu, "Deactivate Service", "deactivateService");
 			createButton(panSubmenu, "Activate Service", "activateService");
-			createButton(panSubmenu, "Edit Parameters", "editParams");
+			createButton(panSubmenu, "View Parameters", "editParams");
 		}
 
 		panSubmenu = createButtonGroup(panMenu, "Contexts");
@@ -358,7 +359,7 @@ public class Axis2SwingUI implements ActionListener
 		}
 		else if (ae.getActionCommand().equals("editParams"))
 		{
-
+			displayNewContent(new EditServiceParametersPanel(controller));
 		}
 		else if (ae.getActionCommand().equals("viewHierarchy"))
 		{
