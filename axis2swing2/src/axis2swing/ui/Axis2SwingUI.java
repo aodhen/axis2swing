@@ -207,10 +207,9 @@ public class Axis2SwingUI implements ActionListener
 		scrollPane = new JScrollPane(panContent,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		// scrollPane.setBorder(null);
-		// frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
-		frame.getContentPane().add(panContent, BorderLayout.CENTER);
-	}
+		scrollPane.setBorder(null);
+		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		// frame.getContentPane().add(panContent, BorderLayout.CENTER);
 
 	private void initMenu()
 	{
@@ -292,11 +291,23 @@ public class Axis2SwingUI implements ActionListener
 
 	private void displayNewContent(PanelContent newPanelContent)
 	{
-		panContent.setVisible(false);
-		frame.getContentPane().remove(panContent);
+		// panContent.setVisible(false);
+		// frame.getContentPane().remove(panContent);
+		//
+		// panContent = newPanelContent;
+		// frame.getContentPane().add(panContent, BorderLayout.CENTER);
+
+		frame.getContentPane().setVisible(false);
+		frame.getContentPane().remove(scrollPane);
 
 		panContent = newPanelContent;
-		frame.getContentPane().add(panContent, BorderLayout.CENTER);
+		scrollPane = new JScrollPane(panContent,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(null);
+
+		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		frame.getContentPane().setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent ae)
