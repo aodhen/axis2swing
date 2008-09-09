@@ -90,7 +90,8 @@ public class MainApp extends AxisServer {
             
             try
     		{
-    			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
     		} catch (Exception e)
     		{
     			// do nothing
