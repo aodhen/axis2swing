@@ -27,8 +27,8 @@ public class Axis2SwingUIController
 	private UserRole userRole;
 	private Axis2AdminManager adminManager;
 
-	public void setAdminManger(Axis2AdminManager adminManger) {
-		this.adminManager = adminManger;
+	public void setAdminManager(Axis2AdminManager adminManager) {
+		this.adminManager = adminManager;
 	}
 
 	public boolean login(String username, char[] password, String role)
