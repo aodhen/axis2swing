@@ -210,6 +210,7 @@ public class Axis2SwingUI implements ActionListener
 		scrollPane.setBorder(null);
 		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		// frame.getContentPane().add(panContent, BorderLayout.CENTER);
+	}
 
 	private void initMenu()
 	{
