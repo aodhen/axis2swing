@@ -98,7 +98,7 @@ public class MainApp extends AxisServer {
     		}
     		Axis2SwingUI axis2SwingUI = new Axis2SwingUI();
     	
-    		axis2SwingUI.getController().setAdminManger(manager);
+    		axis2SwingUI.getController().setAdminManager(manager);
             
             
                         		
