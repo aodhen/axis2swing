@@ -109,11 +109,6 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="Axis2SwingApp">
-        <java classname="Axis2SwingApp" failonerror="true" fork="yes">
-            <classpath refid="axis2swing.classpath"/>
-        </java>
-    </target>
     <target name="MainApp">
         <java classname="axis2swing.ui.MainApp" failonerror="true" fork="yes">
             <classpath refid="axis2swing.classpath"/>
