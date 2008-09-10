@@ -23,8 +23,6 @@ import javax.swing.JPanel;
 
 import org.apache.axis2.description.AxisServiceGroup;
 
-import axis2swing.data.Module;
-import axis2swing.data.ServiceGroup;
 import axis2swing.ui.Axis2SwingUIController;
 
 public class EngageModuleGroupPanel extends PanelContent

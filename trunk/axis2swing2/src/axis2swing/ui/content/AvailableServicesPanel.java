@@ -22,9 +22,6 @@ import org.apache.axis2.description.AxisService;
 
 import java.util.Iterator;
 
-import axis2swing.data.Module;
-import axis2swing.data.Operation;
-import axis2swing.data.Service;
 import axis2swing.ui.Axis2SwingUIController;
 
 public class AvailableServicesPanel extends PanelContent
