@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 
 import org.apache.axis2.description.AxisService;
 
-import axis2swing.data.Service;
+
 import axis2swing.ui.Axis2SwingUIController;
 
 public class ActivateServicePanel extends PanelContent

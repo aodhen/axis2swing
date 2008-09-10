@@ -9,14 +9,9 @@ import java.util.List;
 import org.apache.axis2.deployment.util.PhasesInfo;
 import org.apache.axis2.description.AxisService;
 import org.apache.axis2.engine.AxisConfiguration;
+import org.apache.axis2.engine.Handler;
+import org.apache.axis2.engine.Phase;
 
-import axis2swing.data.Handler;
-import axis2swing.data.Module;
-import axis2swing.data.Operation;
-import axis2swing.data.Phase;
-import axis2swing.data.PhaseInfo;
-import axis2swing.data.Service;
-import axis2swing.data.ServiceGroup;
 import axis2swing.data.UserRole;
 import axis2swing.middleware.Axis2AdminManager;
 import axis2swing.middleware.UserAuthentication;
@@ -97,28 +92,7 @@ public class Axis2SwingUIController
 		return adminManager.getPhases();
 	}
 
-	public PhaseInfo getGlobalExecutionChains()
-	{
-		PhaseInfo phaseInfo = new PhaseInfo();
-
-		// TODO get global execution chains
-
-		// TODO remove this stub
-		Phase newPhase = new Phase("Transport");
-		newPhase.addHandler(new Handler("RequestURIBasedDispatcher"));
-		newPhase.addHandler(new Handler("SOAPActionBasedDispatcher"));
-		phaseInfo.addInFlowPhase(newPhase);
-
-		phaseInfo.addInFaultFlowPhase(new Phase("PreDispatch"));
-
-		newPhase = new Phase("MessageOut");
-		newPhase.addHandler(new Handler("AddressingOutHandler"));
-		phaseInfo.addOutFlowPhase(newPhase);
-
-		phaseInfo.addOutFaultFlowPhase(new Phase("Security"));
-
-		return phaseInfo;
-	}
+	
 
 	public Collection getAvailableServices()
 	{

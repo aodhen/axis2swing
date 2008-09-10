@@ -19,8 +19,6 @@ import org.apache.axis2.description.AxisOperation;
 import org.apache.axis2.description.AxisService;
 import org.apache.axis2.description.AxisServiceGroup;
 
-import axis2swing.data.Service;
-import axis2swing.data.ServiceGroup;
 import axis2swing.ui.Axis2SwingUIController;
 
 public class AvailableServiceGroupsPanel extends PanelContent

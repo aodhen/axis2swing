@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import axis2swing.data.Module;
 import axis2swing.ui.Axis2SwingUIController;
 
 public class EngageModuleGloballyPanel extends PanelContent

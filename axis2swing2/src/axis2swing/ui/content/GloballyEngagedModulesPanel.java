@@ -10,7 +10,6 @@ import org.apache.axis2.description.AxisModule;
 
 import java.util.Iterator;
 
-import axis2swing.data.Module;
 import axis2swing.ui.Axis2SwingUIController;
 
 public class GloballyEngagedModulesPanel extends PanelContent
