@@ -1,1 +1,9 @@
-NOTE: Main class file is MainApp.
+NOTE: Main class is axis2swing.ui.MainApp
+
+For testing purposes, the following usernames and passwords may be used:
+
+username/password: admin/adminpass (role: Administrator)
+
+username/password: manager/mgrpass (role: Manager)
+
+username/password: user/userpass (role: User)
