@@ -1,0 +1,1 @@
+Creating a swing interface that accesses the axis2 administrative functions.
